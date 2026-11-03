@@ -1,4 +1,12 @@
-# diskvis
+<p align="center">
+  <img src="assets/stamp.svg" alt="Warning: vibe slopped" width="380">
+</p>
+
+<p align="center">
+  <img src="assets/logo.svg" alt="" width="72">
+</p>
+
+<h1 align="center">diskvis</h1>
 
 See what is using disk space in WSL, and when it's time to clean up. Built with
 Zig caches in mind, since they grow without limit. It never deletes anything.
@@ -38,3 +46,7 @@ disk fills.
 ```bash
 python3 test_diskvis.py
 ```
+
+## License
+
+[MIT](LICENSE)
