@@ -1,0 +1,9 @@
+[Unit]
+Description=Scan disk usage for diskvis
+
+[Service]
+Type=oneshot
+ExecStart=%h/repos/diskvis/diskvis.py report
+Nice=19
+IOSchedulingClass=idle
+StandardOutput=null

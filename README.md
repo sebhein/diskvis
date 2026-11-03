@@ -24,15 +24,33 @@ Needs only Python 3.
 
 The report says **TIME TO CLEAN UP** when any of these is true:
 
-- Zig build output reaches 100G
+- Zig build output reaches 500G
 - Linux has less than 100G usable
-- The virtual disk holds 100G or more of empty space
 
 The limits are constants at the top of `diskvis.py`.
 
 Each full report of `/` also records usage in `~/.local/state/diskvis/`. Once
 those reports span at least a day, it shows growth per day and roughly when the
 disk fills.
+
+## Getting warned automatically
+
+A daily systemd timer keeps the numbers current. It assumes the repo is at
+`~/repos/diskvis`, and that systemd is enabled in WSL:
+
+```bash
+mkdir -p ~/.config/systemd/user
+cp systemd/diskvis.* ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now diskvis.timer
+```
+
+Then add this to `~/.bashrc` to see a warning in each new terminal when a limit
+is passed. It prints nothing otherwise:
+
+```bash
+"$HOME/repos/diskvis/diskvis.py" check -q || true
+```
 
 ## Tests
 

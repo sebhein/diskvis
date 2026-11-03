@@ -1,0 +1,10 @@
+[Unit]
+Description=Scan disk usage for diskvis once a day
+
+[Timer]
+OnCalendar=daily
+# If WSL was off at the scheduled time, scan as soon as it next starts.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

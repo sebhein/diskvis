@@ -20,9 +20,8 @@ from pathlib import Path
 G = 1024**3
 
 # When to clean up. Going past any of these turns the verdict into "act".
-ZIG_LIMIT = 100 * G  # Zig build output is rebuildable, so this much is waste
+ZIG_LIMIT = 500 * G  # Zig build output is rebuildable, so this much is waste
 FREE_LIMIT = 100 * G  # usable free space left for Linux
-DEAD_LIMIT = 100 * G  # empty space stuck inside ext4.vhdx
 STALE_DAYS = 14  # a Zig cache not written for this long is flagged "stale"
 
 STATE_DIR = Path(
@@ -273,12 +272,6 @@ def verdict(cap, zig_total):
         )
     if cap["usable"] < FREE_LIMIT:
         reasons.append(f"Only {size(cap['usable'])} of usable space left for Linux")
-    vhdx = cap["vhdx"]
-    if vhdx and vhdx["dead"] >= DEAD_LIMIT:
-        reasons.append(
-            f"ext4.vhdx is holding about {size(vhdx['dead'])} of empty space "
-            f"that {vhdx['drive']} can't use until it is compacted"
-        )
     return reasons
 
 
@@ -501,8 +494,7 @@ def report(result, cap, records, style):
             print(f"  {size(sum(d.size for d in rest)):>6}  {style.dim(f'{len(rest)} more')}")
         print()
 
-    if reasons:
-        print_cleanup_steps(vhdx, style)
+    print_cleanup_steps(vhdx, style)
 
     missing = cap["used"] - result.tree.size
     if is_full_scan and missing > G:
@@ -592,7 +584,7 @@ def run_check(quiet):
     zig = records[-1]["zig"] if records else None
     reasons = verdict(cap, zig)
     if reasons:
-        print("diskvis: time to clean up. " + "; ".join(reasons) + ".")
+        print("diskvis: time to clean up. " + "; ".join(reasons) + ". Run diskvis.py for details.")
         return 1
     if not quiet:
         scanned = f"last scan {age(records[-1]['t'])}" if records else "not scanned yet"

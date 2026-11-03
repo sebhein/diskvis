@@ -109,12 +109,14 @@ class ScanTest(unittest.TestCase):
 
 class VerdictTest(unittest.TestCase):
     def test_ok_when_under_all_limits(self):
-        self.assertEqual(diskvis.verdict(cap(), 10 * G), [])
+        self.assertEqual(diskvis.verdict(cap(), diskvis.ZIG_LIMIT - 1), [])
 
     def test_each_limit_triggers(self):
-        self.assertIn("Zig", diskvis.verdict(cap(), 100 * G)[0])
+        self.assertIn("Zig", diskvis.verdict(cap(), diskvis.ZIG_LIMIT)[0])
         self.assertIn("usable", diskvis.verdict(cap(usable=99 * G), 0)[0])
-        self.assertIn("ext4.vhdx", diskvis.verdict(cap(dead=100 * G), 0)[0])
+
+    def test_empty_space_in_vhdx_is_not_a_reason_to_act(self):
+        self.assertEqual(diskvis.verdict(cap(dead=900 * G), 0), [])
 
     def test_unknown_zig_total_is_tolerated(self):
         self.assertEqual(diskvis.verdict(cap(), None), [])
