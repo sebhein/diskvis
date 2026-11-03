@@ -1,0 +1,40 @@
+# diskvis
+
+See what is using disk space in WSL, and when it's time to clean up. Built with
+Zig caches in mind, since they grow without limit. It never deletes anything.
+
+Needs only Python 3.
+
+```bash
+./diskvis.py                 # scan and print a report
+./diskvis.py browse ~/repos  # explore folders interactively
+./diskvis.py check           # instant verdict from the last report's scan (exit 1 = act)
+./diskvis.py check -q        # same, but silent when there's nothing to do
+```
+
+## Why WSL needs this
+
+WSL stores Linux files in a virtual disk (`ext4.vhdx`) on a Windows drive. That
+file grows but doesn't shrink by itself, so deleting files in Linux doesn't give
+space back to Windows. diskvis shows how much empty space the file is holding
+and prints the steps to compact it.
+
+## When it says to clean up
+
+The report says **TIME TO CLEAN UP** when any of these is true:
+
+- Zig build output reaches 100G
+- Linux has less than 100G usable
+- The virtual disk holds 100G or more of empty space
+
+The limits are constants at the top of `diskvis.py`.
+
+Each full report of `/` also records usage in `~/.local/state/diskvis/`. Once
+those reports span at least a day, it shows growth per day and roughly when the
+disk fills.
+
+## Tests
+
+```bash
+python3 test_diskvis.py
+```
