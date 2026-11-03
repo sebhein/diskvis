@@ -20,13 +20,6 @@ Needs only Python 3.
 ./diskvis.py check -q        # same, but silent when there's nothing to do
 ```
 
-## Why WSL needs this
-
-WSL stores Linux files in a virtual disk (`ext4.vhdx`) on a Windows drive. That
-file grows but doesn't shrink by itself, so deleting files in Linux doesn't give
-space back to Windows. diskvis shows how much empty space the file is holding
-and prints the steps to compact it.
-
 ## When it says to clean up
 
 The report says **TIME TO CLEAN UP** when any of these is true:
