@@ -1,5 +1,5 @@
-<p align="center">
-  <img src="assets/stamp.svg" alt="Warning: vibe slopped" width="380">
+<p>
+  <img src="assets/stamp.svg" alt="Warning: vibe slopped" width="240">
 </p>
 
 <p align="center">
